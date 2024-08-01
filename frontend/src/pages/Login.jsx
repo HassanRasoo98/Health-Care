@@ -39,7 +39,7 @@ const handleInputChange =e => {
           <button type='submit' className='w-full bg-primaryColor text-white text-[18px] leading-[30px] rounded-lg px-4 py-3'>Login</button>
 
         </div>
-        <p className='mt-5 text-textColor text-center'>Don't have an account <Link to='/Signup' className='text-primaryColor font-medium ml-1 '>SignUp</Link></p>
+        <p className='mt-5 text-textColor text-center'>Don't have an account <Link to='/signup' className='text-primaryColor font-medium ml-1 '>SignUp</Link></p>
       </form>
     </div>
 
