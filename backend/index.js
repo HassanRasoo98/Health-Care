@@ -24,7 +24,9 @@ const connectDB = async () => {
             useUnifiedTopology:true,
             
         })
+        console.log("mongo connected")
     } catch (err) {
+        console.log("mongo connection failed")
 
     }
 }
@@ -37,5 +39,6 @@ app.use(cors(corsOptions))
 
 
 app.listen(port,() => {
+    connectDB()
     console.log("Server is running on port" + port)
 })
