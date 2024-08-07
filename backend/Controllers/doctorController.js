@@ -1,20 +1,15 @@
 import Doctor from "../models/DoctorSchema.js"
 
-
-
-
-
-
-export const updateUser = async (req, res) => {
+export const updateDoctor = async (req, res) => {
     const id = req.params.id
 
     try {
-        const updatedUser = await User.findByIdAndUpdate(id, 
+        const updatedDoctor = await Doctor.findByIdAndUpdate(id, 
             {$set:req.body}, 
             {new:true})
         res
         .status(200)
-        .json({success:true, message:'Successfully Updated', data:updatedUser})
+        .json({success:true, message:'Successfully Updated', data:updatedDoctor})
     }
     catch (err){
         res.status(500).json({success:false, message:'Failed to update'})
@@ -23,11 +18,11 @@ export const updateUser = async (req, res) => {
 
 }
 
-export const deleteUser = async (req, res) => {
+export const deleteDoctor = async (req, res) => {
     const id = req.params.id
 
     try {
-        await User.findByIdAndDelete(id)
+        await Doctor.findByIdAndDelete(id)
         res.status(200).json({success:true, message:'Successfully Deleted'})
     }
     catch (err){
@@ -36,33 +31,33 @@ export const deleteUser = async (req, res) => {
     }
 }
 
-export const getSingleUser = async (req, res) => {
+export const getSingleDoctor = async (req, res) => {
     const id = req.params.id
 
     try {
-        const user = await User.findById(id).select('-password')
+        const doctor = await Doctor.findById(id).select('-password')
         res
         .status(200)
-        .json({success:true, message:'User Found', data:user})
+        .json({success:true, message:'Doctor Found', data:doctor})
     }
     catch (err){
-        res.status(404).json({success:false, message:'no user found'})
+        res.status(404).json({success:false, message:'no Doctor found'})
 
     }
 
 }
 
-export const getAllUser = async (req, res) => {
+export const getAllDoctor = async (req, res) => {
     
 
     try {
-        const users = await User.find({}).select('-password')
+        const doctors = await Doctor.find({}).select('-password')
         res
         .status(200)
-        .json({success:true, message:'Users Found', data:users})
+        .json({success:true, message:'Doctors Found', data:doctors})
     }
     catch (err){
-        res.status(404).json({success:false, message:'no user found'})
+        res.status(404).json({success:false, message:'no Doctor found'})
 
     }
 
