@@ -1,5 +1,9 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState, useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { BASE_URL } from '../config'
+import { toast } from 'react-toastify'
+import { AuthContext } from '../context/AuthContext.jsx'
+import HashLoader from 'react-spinners/HashLoader.js'
 
 const Login = () => {
 const [formData, SetFormData] = useState({
@@ -7,6 +11,10 @@ const [formData, SetFormData] = useState({
   password:''
 
 })
+
+const [loading, setLoading] =useState(false)
+const navigate = useNavigate()
+const {dispatch} = useContext(AuthContext)
 
 const handleInputChange =e => {
   SetFormData({... formData, [e.target.name]: e.target.value})
@@ -16,7 +24,7 @@ const submitHandler = async event =>{
   setLoading(true)
 
   try{
-    const res = await fetch (`${BASE_URL}/auth/signup`,{
+    const res = await fetch (`${BASE_URL}/auth/login`,{
       method : 'POST',
       headers:{
         'Content-Type': 'application/json'   
@@ -24,14 +32,27 @@ const submitHandler = async event =>{
         body: JSON.stringify(formData)
 
     })
-    const {message} = await res.json()
+    const result = await res.json()
     if(!res.ok){
-      throw new Error(message)
+      throw new Error(result.message)
     
     }
+
+
+    dispatch({
+      type:'LOGIN_SUCCESS',
+      payload:{
+        user:result.data,
+        token:result.token,
+        role:result.role,
+      },
+    })
+
+    console.log(result, 'Login data')
+
     setLoading(false)
-    toast.success(message)
-    navigate('/login')
+    toast.success(result.message)
+    navigate('/home')
    
 
   } catch (err){
@@ -65,7 +86,7 @@ const submitHandler = async event =>{
         </div>
 
         <div className='mt-7'>
-          <button type='submit' className='w-full bg-primaryColor text-white text-[18px] leading-[30px] rounded-lg px-4 py-3'>Login</button>
+          <button type='submit' className='w-full bg-primaryColor text-white text-[18px] leading-[30px] rounded-lg px-4 py-3'>{loading ? <HashLoader size={25} color='#fff'/> : 'Login'}</button>
 
         </div>
         <p className='mt-5 text-textColor text-center'>Don't have an account <Link to='/signup' className='text-primaryColor font-medium ml-1 '>SignUp</Link></p>
