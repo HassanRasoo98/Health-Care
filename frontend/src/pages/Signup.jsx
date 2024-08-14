@@ -5,8 +5,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import uploadImageToCloudinary from '../utils/uploadCloudinary';
 import {toast} from 'react-toastify'
 import HashLoader from 'react-spinners/HashLoader'
+import { BASE_URL } from '../config.js';
+
+
 
 const Signup = () => {
+
+  
 
   const [selectedFile, setSelectedFile] = useState(null)
   const [previewURL, setPreviewURL] = useState('')
@@ -45,7 +50,7 @@ const Signup = () => {
   const submitHandler = async event =>{
     event.preventDefault()
     setLoading(true)
-
+  
     try{
       const res = await fetch (`${BASE_URL}/auth/signup`,{
         method : 'POST',
@@ -58,10 +63,12 @@ const Signup = () => {
       const {message} = await res.json()
       if(!res.ok){
         throw new Error(message)
+      
       }
       setLoading(false)
       toast.success(message)
       navigate('/login')
+     
 
     } catch (err){
       toast.error(err.message)

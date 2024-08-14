@@ -7,8 +7,37 @@ const [formData, SetFormData] = useState({
   password:''
 
 })
+
 const handleInputChange =e => {
   SetFormData({... formData, [e.target.name]: e.target.value})
+}
+const submitHandler = async event =>{
+  event.preventDefault()
+  setLoading(true)
+
+  try{
+    const res = await fetch (`${BASE_URL}/auth/signup`,{
+      method : 'POST',
+      headers:{
+        'Content-Type': 'application/json'   
+      },
+        body: JSON.stringify(formData)
+
+    })
+    const {message} = await res.json()
+    if(!res.ok){
+      throw new Error(message)
+    
+    }
+    setLoading(false)
+    toast.success(message)
+    navigate('/login')
+   
+
+  } catch (err){
+    toast.error(err.message)
+    setLoading(false)
+  }
 }
 
   return (
@@ -17,7 +46,7 @@ const handleInputChange =e => {
       <h3 className='text-headingColor text-[22px] leading-9 font-bold mb-10'>
         Hello! <span className='text-primaryColor'>Welcome </span>Back🎉
       </h3>
-      <form className='py-4 md:py-0'>
+      <form className='py-4 md:py-0' onSubmit={submitHandler}>
         <div className='mb-5'>
           <input type="email" placeholder='Enter Your Email' name='email'value={formData.email}
           onChange={handleInputChange} 
