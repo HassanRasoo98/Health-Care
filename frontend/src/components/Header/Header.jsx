@@ -89,7 +89,7 @@ const Header = () => {
 
   {token && user ?  <div>
     <Link to={`${role === 'doctor' ? '/doctor/profile/me' : '/users/profile/me'}`} >
-    <figure className='w-[35px] h-[35px] rounded-full cursor-pointer mt-9'>
+    <figure className='w-[35px] h-[35px] rounded-full cursor-pointer hidden'>
       <img src= {user?.photo} className='w-full rounded-full' alt="" />
     </figure>
     <h2>{user?.name} </h2>
