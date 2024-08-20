@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react'
 import { token } from '../config'
 
 
-
 const usefetchData = (url) => {
   
     const [data, setData] = useState([])
