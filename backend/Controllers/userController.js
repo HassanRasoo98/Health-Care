@@ -63,7 +63,7 @@ export const getAllUser = async (req, res) => {
         .json({success:true, message:'Users Found', data:users})
     }
     catch (err){
-        res.status(404).json({success:false, message:'no user found'})
+        res.status(404).json({success:false, message:'junaid hit this'})
 
     }
 

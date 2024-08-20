@@ -1,20 +1,21 @@
+import dotenv from 'dotenv'
+ dotenv.config()
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import mongoose from 'mongoose'
-import dotenv from 'dotenv'
 import authRoute from './Routes/auth.js'
 import userRoute from './Routes/user.js'
 import doctorRoute from './Routes/doctor.js'
 import reviewRoute from './Routes/review.js'
 
 
-dotenv.config()
+// dotenv.config()
 const app = express()
-const port = process.env.PORT || 8000
+const port = process.env.PORT 
 
 const corsOptions = {
-    origin: true
+    // origin: true
 }
 
 app.get('/',(req,res)=>{
@@ -27,10 +28,12 @@ app.get('/',(req,res)=>{
 mongoose.set('strictQuery',false)
 const connectDB = async () => {
      try {
-    await mongoose.connect(process.env.MONGO_URL, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
+    await mongoose.connect(process.env.MONGO_URL,
+       { useNewUrlParser: true,
+        useUnifiedTopology:true
+        }
+    )
+    
     console.log("MongoDB is connected")
     } 
     catch (err) {
@@ -51,7 +54,7 @@ app.use('/api/v1/reviews', reviewRoute) //domain api
 
 
 
-app.listen(port,() => {
-    connectDB()
+app.listen(port, async() => {
+    await connectDB()
     console.log("Server is running on port" + port)
 })
