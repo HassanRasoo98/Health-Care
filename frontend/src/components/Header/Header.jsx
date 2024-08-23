@@ -88,11 +88,11 @@ const Header = () => {
 <div className="flex items-center gap-4">
 
   {token && user ?  <div>
-    <Link to={`${role === 'doctor' ? '/doctor/profile/me' : '/users/profile/me'}`} >
-    <figure className='w-[35px] h-[35px] rounded-full cursor-pointer hidden'>
+    <Link to={`${role === 'doctor' ? '/doctors/profile/me' : '/users/profile/me'}`} >
+    <figure className='w-[35px] h-[35px] rounded-full cursor-pointer'>
       <img src= {user?.photo} className='w-full rounded-full' alt="" />
     </figure>
-    <h2>{user?.name} </h2>
+    <h2 className='hidden'>{user?.name} </h2>
     </Link>
   </div> : <Link to='/login'>
             <button className='bg-primaryColor py-2 text-white font-[600] h-[44px] w-[70px] flex items-center justify-center rounded-[25px]'>Login</button>
