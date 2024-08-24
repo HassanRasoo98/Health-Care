@@ -11,9 +11,9 @@ const Profile = () => {
         bio:'',
         specialization:'',
         ticketPrice:0,
-        qualifications:[{startingDate:'', endingDate:'', degree:'', university:'' }],
-        experiences:[{startingDate:'', endingDate:'', position:'', hospital:'' }],
-        timeSlots:[{day:'', startingTime:'', endingTime:''}],
+        qualifications:[],
+        experiences:[],
+        timeSlots:[],
         about:'',
         photo:''
 
@@ -26,6 +26,8 @@ const Profile = () => {
 const handleFileInputChange = e =>{
 
 }
+
+
 const handleProfileHandler = async e=>{
     e.preventDefault()
 }
@@ -33,11 +35,67 @@ const handleProfileHandler = async e=>{
 const addItem=(key,item)=>{
     setFormData(prevFormData=> ({...prevFormData, [key]: [...prevFormData[key],item]}))
 }
+
+//ReusableinputChange Function
+const handleReusableInputChangeFunc = (key, index, event) =>{
+    const {name, value} = event.target
+
+    setFormData(prevFormData => {
+        const updateItems = [...prevFormData[key]]
+
+        updateItems[index][name]=value
+
+        return{
+            ...prevFormData,
+            [key]:updateItems,
+        }
+    })
+}
+
+const deleteItem = (key, index) =>{
+    setFormData(prevFormData=> ({...prevFormData,[key]:prevFormData[key].filter((_,i)=>i !== index)}))
+}
+
+
 const addQualification = async e=>{
     e.preventDefault()
     addItem('qualifications',{
         startingDate:'', endingDate:'', degree:'', university:'' 
     })
+}
+
+const handleQualificationChange = (event,index) => {
+    handleReusableInputChangeFunc('qualifications', index, event)
+}
+const deleteQualification = (e,index)=>{
+    e.preventDefault()
+    deleteItem('qualifications',index)
+}
+
+const addExperience = async e=>{
+    e.preventDefault()
+    addItem('experiences',{startingDate:'', endingDate:'', position:'', hospital:'' })
+}
+
+const handleExperienceChange = (event,index) => {
+    handleReusableInputChangeFunc('experiences', index, event)
+}
+const deleteExperience = (e,index)=>{
+    e.preventDefault()
+    deleteItem('experiences',index)
+}
+
+const addTimeSlot = async e=>{
+    e.preventDefault()
+    addItem('timeSlots',{day:'Sunday', startingTime:'10:30', endingTime:'04:30'})
+}
+
+const handleTimeSlotChange = (event,index) => {
+    handleReusableInputChangeFunc('timeSlots', index, event)
+}
+const deleteTimeSlot = (e,index)=>{
+    e.preventDefault()
+    deleteItem('timeSlots',index)
 }
     return (
     <div>
@@ -125,26 +183,35 @@ const addQualification = async e=>{
                                 <div className="grid grid-cols-2 gap-5">
                                     <div>
                                         <p className='form_label'>Starting Date*</p>
-                                        <input type="date" name='startingDate' value={item.startingDate} className='form_input' />
+                                        <input type="date" name='startingDate' value={item.startingDate} className='form_input' 
+                                        onChange={e=> handleQualificationChange(e,index)}
+                                        />
                                     </div>
 
                                     <div>
                                         <p className='form_label'>Ending Date*</p>
-                                        <input type="date" name='endingDate' value={item.endingDate} className='form_input' />
+                                        <input type="date" name='endingDate' value={item.endingDate} className='form_input' 
+                                        onChange={e=> handleQualificationChange(e,index)}
+
+                                        />
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-5 mt-5">
                                     <div>
                                         <p className='form_label'>Degree*</p>
-                                        <input type="text" name='degree' value={item.degree} className='form_input' />
+                                        <input type="text" name='degree' value={item.degree} className='form_input'
+                                        onChange={e=> handleQualificationChange(e,index)}
+                                        />
                                     </div>
 
                                     <div>
                                         <p className='form_label'>University*</p>
-                                        <input type="text" name='university' value={item.university} className='form_input' />
+                                        <input type="text" name='university' value={item.university} className='form_input'
+                                        onChange={e=> handleQualificationChange(e,index)}
+                                        />
                                     </div>
                                 </div>
-                            <button className='bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[30px] cursor-pointer'><AiOutlineDelete/></button>
+                            <button onClick={e=>deleteQualification(e,index)} className='bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[30px] cursor-pointer'><AiOutlineDelete/></button>
 
                             </div>
                         </div>
@@ -159,31 +226,39 @@ const addQualification = async e=>{
                                 <div className="grid grid-cols-2 gap-5">
                                     <div>
                                         <p className='form_label'>Starting Date*</p>
-                                        <input type="date" name='startingDate' value={item.startingDate} className='form_input' />
+                                        <input type="date" name='startingDate' value={item.startingDate} className='form_input'
+                                        onChange={e=> handleExperienceChange(e,index)} />
                                     </div>
 
                                     <div>
                                         <p className='form_label'>Ending Date*</p>
-                                        <input type="date" name='endingDate' value={item.endingDate} className='form_input' />
+                                        <input type="date" name='endingDate' value={item.endingDate} className='form_input' 
+                                        onChange={e=> handleExperienceChange(e,index)} 
+                                        />
                                     </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-5 mt-5">
                                     <div>
                                         <p className='form_label'>Position*</p>
-                                        <input type="text" name='position' value={item.position} className='form_input' />
+                                        <input type="text" name='position' value={item.position} className='form_input' 
+                                        onChange={e=> handleExperienceChange(e,index)} 
+                                        />
+                                        
                                     </div>
 
                                     <div>
                                         <p className='form_label'>Hospital*</p>
-                                        <input type="text" name='hospital' value={item.hospital} className='form_input' />
+                                        <input type="text" name='hospital' value={item.hospital} className='form_input' 
+                                        onChange={e=> handleExperienceChange(e,index)} 
+                                        />
                                     </div>
                                 </div>
-                            <button className='bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[30px] cursor-pointer'><AiOutlineDelete/></button>
+                            <button onClick={e=>deleteExperience(e,index)} className='bg-red-600 p-2 rounded-full text-white text-[18px] mt-2 mb-[30px] cursor-pointer'><AiOutlineDelete/></button>
 
                             </div>
                         </div>
                     ))}
-                    <button className='bg-[#000] py-2 px-5 rounded text-white h-fit cursor-pointer'>Add Experience</button>
+                    <button onClick={addExperience} className='bg-[#000] py-2 px-5 rounded text-white h-fit cursor-pointer'>Add Experience</button>
                 </div>
                 <div className="mb-5">
                         <p className='form_label'>Time Slots*</p>
@@ -193,7 +268,8 @@ const addQualification = async e=>{
                                 <div className="grid grid-cols-2 md:grid-cols-4 mb-[30px] gap-5">
                                     <div>
                                         <p className='form_label'>Day*</p>
-                                      <select name="day" value={item.day} className='form_input py-3.5'>
+                                      <select name="day" value={item.day} className='form_input py-3.5'
+                                       onChange={e=> handleTimeSlotChange(e,index)} >
                                         <option value="">Select</option>
                                         <option value="satureday">Satureday</option>
                                         <option value="sunday">Sunday</option>
@@ -207,14 +283,17 @@ const addQualification = async e=>{
 
                                     <div>
                                         <p className='form_label'>Starting Time*</p>
-                                        <input type="time" name='startingTime' value={item.startingTime} className='form_input' />
+                                        <input type="time" name='startingTime' value={item.startingTime} className='form_input' 
+                                        onChange={e=> handleTimeSlotChange(e,index)}/>
                                     </div>
                                     <div>
                                         <p className='form_label'>Ending Time*</p>
-                                        <input type="time" name='endingTime' value={item.endingTime} className='form_input' />
+                                        <input type="time" name='endingTime' value={item.endingTime} className='form_input' 
+                                        onChange={e=> handleTimeSlotChange(e,index)}/>
                                     </div>
                                     <div className='flex items-center'>
-                                    <button className='bg-red-600 p-2 rounded-full text-white text-[18px] mt-6 cursor-pointer'><AiOutlineDelete/></button>
+                                    <button onClick={e=>deleteTimeSlot(e,index)} 
+                                     className='bg-red-600 p-2 rounded-full text-white text-[18px] mt-6 cursor-pointer'><AiOutlineDelete/></button>
                                     </div>
                                 </div>
                                
@@ -223,7 +302,7 @@ const addQualification = async e=>{
                             </div>
                         </div>
                     ))}
-                    <button className='bg-[#000] py-2 px-5 rounded text-white h-fit cursor-pointer'>Add TimeSlot</button>
+                    <button onClick={addTimeSlot} className='bg-[#000] py-2 px-5 rounded text-white h-fit cursor-pointer'>Add TimeSlot</button>
                 </div>
                 <div className='mb-5'>
                     <p className='form_label'>About*</p>
