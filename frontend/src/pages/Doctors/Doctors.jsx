@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { doctors } from '../../assets/data/doctors'
 import DoctorCard from '../../components/Doctors/DoctorCard'
 import Testimonial from '../../components/Testimonial/Testimonial'
@@ -10,14 +10,23 @@ import Error from '../../components/Error/Error'
 
 const Doctors = () => {
   const [query, setQuery] = useState('')
+  const [debounceQuery, setDebounceQuery] = useState('')
+
 
   const handleSearch=()=>{
     setQuery(query.trim())
 
     console.log('handle search')
   }
+  useEffect(()=>{
+    const timeout = setTimeout(()=>{
+      setDebounceQuery(query)
+    },700)
+    return ()=> clearTimeout(timeout)
 
-  const {data:doctors , loading, error} = usefetchData(`${BASE_URL}/doctors?query=${query}`)
+  },[query])
+
+  const {data:doctors , loading, error} = usefetchData(`${BASE_URL}/doctors?query=${debounceQuery}`)
   
   
   return (
