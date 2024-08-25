@@ -32,6 +32,7 @@ const FeedbackForm = () => {
     body: JSON.stringify({rating,reviewText})
 })
 const result = await res.json()
+console.log(result)
 if(!res.ok){
     throw new Error(result.message)
 }
