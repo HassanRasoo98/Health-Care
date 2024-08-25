@@ -7,6 +7,7 @@ import { BASE_URL } from '../../config'
 import Tabs from './Tabs'
 import starIcon from '../../assets/images/Star.png'
 import Profile from './Profile'
+import Appointments from './Appointments'
 
 
 const Dashboard = () => {
@@ -78,7 +79,7 @@ const Dashboard = () => {
                   <DoctorAbout className='px-2' name={data.name} about={data.about} qualifications={data.qualifications} experiences={data.experiences} />
                 </div>
               )}
-                {tab === 'appointments' && <div>appointments</div>}
+                {tab === 'appointments' && <Appointments appointments={data.appointments}/>}
                 {tab === 'settings' && <Profile doctorData={data} />}
 
               </div>
