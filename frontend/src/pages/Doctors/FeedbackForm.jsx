@@ -1,13 +1,47 @@
 import React from 'react'
 import { useState } from 'react'
 import { AiFillStar } from 'react-icons/ai'
+import { useParams } from 'react-router-dom'
+import { BASE_URL, token } from '../../config'
+import {toast} from 'react-toastify'
+import HashLoader from 'react-spinners/HashLoader'
 
-const FeedbackFrom = () => {
+const FeedbackForm = () => {
   const [rating, setRating] = useState(0)
   const [hover, setHover] = useState(0)
   const [reviewText, setReviewText] = useState('')
-  const handleSubmitReviews = async e => {
+  const [loading, setLoading] = useState(false)
+
+  const {id} = useParams()
+
+  const handleSubmitReview = async e => {
     e.preventDefault();
+    setLoading(true)
+
+    try {
+        if(!rating || !reviewText){
+            setLoading(false)
+        return toast.error('Rating & Review fields are required')
+   }
+   const res  = await fetch(`${BASE_URL}/doctors/${id}/reviews`,{
+    method:'POST',
+    headers:{
+        'Content-Type':'application/json',
+        Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify({rating,reviewText})
+})
+const result = await res.json()
+if(!res.ok){
+    throw new Error(result.message)
+}
+setLoading(false)
+toast.success(result.message)    
+
+    } catch (err) {
+        setLoading(false)
+        toast.error(err.message)
+    }
   }
 
     return (
@@ -25,9 +59,8 @@ const FeedbackFrom = () => {
                         className={`${
                             index <= ((rating && hover) || hover)
                             ? "text-yellowColor"
-                            : "text-grey-400"
+                            : "text-gray-400"
                         } bg-transparent border-none outline-none text-[22px] cursor-pointer`}
-                            onclick={()=> setRating(index)}
                             onMouseEnter={()=> setHover(index)}
                             onMouseLeave={()=> setHover (rating)}
                             onDoubleClick={()=> {
@@ -49,10 +82,10 @@ const FeedbackFrom = () => {
         
         </div>
         <button type='submit'
-        onClick={handleSubmitReviews}
-        className='btn'>Submit Feedback</button>
+        onClick={handleSubmitReview}
+        className='btn'>{ loading ? <HashLoader size={25} color='#fff' /> : 'Submit Feedback'}</button>
     </form>
   )
 }
 
-export default FeedbackFrom
+export default FeedbackForm
