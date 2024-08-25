@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import {AiOutlineDelete} from 'react-icons/ai'
+import uploadImageToCloudinary from './../../utils/uploadCloudinary'
+import {BASE_URL, token} from '../../config'
+import {toast} from 'react-toastify'
 
-const Profile = () => {
+const Profile = ({doctorData}) => {
   
     const [formData, setFormData] = useState ({
         name:'',
         email:'',
+        password:'',
         phone:'',
         bio:'',
         specialization:'',
@@ -18,20 +22,60 @@ const Profile = () => {
         photo:''
 
     })
+    useEffect(()=>{
+        setFormData({
+            name: doctorData?.name,
+            email:doctorData?.email,
+        phone:doctorData?.phone,
+        bio:doctorData?.bio,
+        specialization:doctorData?.specialization,
+        ticketPrice:doctorData?.ticketPrice,
+        qualifications:doctorData?.qualifications,
+        experiences:doctorData?.experiences,
+        timeSlots:doctorData?.timeSlots,
+        about:doctorData?.about,
+        photo:doctorData?.photo
+
+        })
+    },[doctorData])
   
  const   handleInputChange = e=>{
-        setFormData({...formData, [e.target.name]:e.target.value})
+        setFormData({...formData, [e.target.name]: e.target.value})
     }
 
-const handleFileInputChange = e =>{
-
+const handleFileInputChange = async event =>{
+    const file= event.target.files[0]
+    const data = await uploadImageToCloudinary(file)
+    setFormData({...formData, photo: data?.url})
 }
 
 
-const handleProfileHandler = async e=>{
-    e.preventDefault()
-}
-
+const updateProfileHandler = async e => {
+    e.preventDefault();
+  
+    try {
+      const res = await fetch(`${BASE_URL}/doctors/${doctorData._id}`, {
+        method: 'PUT',
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${token}` // Use backticks for string interpolation
+        },
+        body: JSON.stringify(formData)
+      });
+  
+      const result = await res.json();
+      console.log(result);
+      if (!res.ok) {
+        throw new Error(result.message);
+      }
+  
+      toast.success(result.message);
+  
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+  
 const addItem=(key,item)=>{
     setFormData(prevFormData=> ({...prevFormData, [key]: [...prevFormData[key],item]}))
 }
@@ -53,11 +97,11 @@ const handleReusableInputChangeFunc = (key, index, event) =>{
 }
 
 const deleteItem = (key, index) =>{
-    setFormData(prevFormData=> ({...prevFormData,[key]:prevFormData[key].filter((_,i)=>i !== index)}))
+    setFormData(prevFormData=> ({...prevFormData,[key]:prevFormData[key].filter((_, i)=>i !== index)}))
 }
 
 
-const addQualification = async e=>{
+const addQualification = e=>{
     e.preventDefault()
     addItem('qualifications',{
         startingDate:'', endingDate:'', degree:'', university:'' 
@@ -100,7 +144,7 @@ const deleteTimeSlot = (e,index)=>{
     return (
     <div>
         <h2 className='heading-textColor font-bold text-[24px] leading-9 mb-10'>Profile Information</h2>
-        <form >
+        <form>
             <div className='mb-5'>
                 <p className='form_label'>Name*</p>
                 <input type="text" 
@@ -171,7 +215,7 @@ const deleteTimeSlot = (e,index)=>{
                         <p className='form_label'>Ticket Price*</p>
                         <input type="number" placeholder='100' name='ticketPrice' value={formData.ticketPrice} 
                         className='form_input'
-                        onClick={handleInputChange}/>
+                        onChange={handleInputChange}/>
                     </div>
                     </div>
                     </div>
@@ -306,7 +350,8 @@ const deleteTimeSlot = (e,index)=>{
                 </div>
                 <div className='mb-5'>
                     <p className='form_label'>About*</p>
-                    <textarea name="about" rows={5} value={formData.about} placeholder='write about you' onClick={handleInputChange} className='form_input'></textarea>
+                    <textarea name="about" rows={5} value={formData.about} placeholder='write about you' 
+                    onChange={handleInputChange} className='form_input'></textarea>
                 </div>
                 <div className="mb-5 flex items-center gap-3">
                 {formData.photo &&  (<figure className='w-[60px] h-[60px] rounded-full border-2 border-solid border-primaryColor
@@ -331,7 +376,7 @@ const deleteTimeSlot = (e,index)=>{
                   </div>
                 </div>
                 <div className="mt-7">
-                    <button type='submit' onClick={handleProfileHandler} className='bg-primaryColor text-white text-[18px] leading-[30px] w-full py-3 px-4 rounded-lg'>Update Profile</button>
+                    <button type='submit' onClick={updateProfileHandler} className='bg-primaryColor text-white text-[18px] leading-[30px] w-full py-3 px-4 rounded-lg'>Update Profile</button>
                 </div>
         </form>
     </div>
