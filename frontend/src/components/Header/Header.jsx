@@ -3,6 +3,7 @@ import logo from '../../assets/images/logo.png';
 import {NavLink, Link} from 'react-router-dom'
 import {BiMenu} from 'react-icons/bi'
 import { AuthContext } from '../../context/AuthContext.jsx'
+import chatbotIcon from '../../assets/images/chatbot.png'
 
 
 const navLinks = [
@@ -22,6 +23,7 @@ const navLinks = [
   path : '/contact',
   display :'Contact'
 },
+
 ]
 
 
@@ -86,6 +88,12 @@ const Header = () => {
            
            {/* NAV RIGHT */}
 <div className="flex items-center gap-4">
+  <div><Link to='/chatbot'>
+    <button> <figure className='w-[90px] h-[90px] pt-9 mt-2.5 rounded-full cursor-pointer'>
+      <img src= {chatbotIcon} className='w-full rounded-full' alt="" />
+    </figure></button>
+    </Link>
+    </div>
 
   {token && user ?  <div>
     <Link to={`${role === 'doctor' ? '/doctors/profile/me' : '/users/profile/me'}`} >

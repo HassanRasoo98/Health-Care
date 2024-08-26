@@ -11,6 +11,7 @@ import MyAccount from '../Dashboard/user-account/MyAccount';
 import Dashboard from '../Dashboard/doctor-account/Dashboard';
 import ProtectedRoute from './ProtectedRoute';
 import CheckoutSuccess from '../pages/Doctors/CheckoutSuccess';
+import ChatBot from '../pages/ChatBot';
 
 const Routers = () => {
   return (
@@ -24,7 +25,8 @@ const Routers = () => {
     <Route path="/contact" element={<Contact/>} />
     <Route path="/services" element={<Services/>} />
     <Route path="/checkout-success" element={<CheckoutSuccess/>} />
-
+    <Route path='/chatbot' element={<ChatBot/>} />
+    
     <Route path="/users/profile/me" element={<ProtectedRoute allowedRoles={['patient']} ><MyAccount/></ProtectedRoute> } />
     <Route path="/doctors/profile/me" element={<ProtectedRoute allowedRoles={['doctor']} ><Dashboard/></ProtectedRoute> } />
 
