@@ -44,19 +44,19 @@ const quickLinks01 = [
 
 const quickLinks02 = [
   {
-    path: '/find-a-doctor',
+    path: '/doctors',
     display: 'Find a Doctor',
   },
   {
-    path: '/',
+    path: '/doctors',
     display: 'Request An Appointment',
   },
   {
-    path: '/',
+    path: '/doctors',
     display: 'Find a Location',
   },
   {
-    path: '/',
+    path: '/doctors',
     display: 'Get an Opinion',
   },
 ];
